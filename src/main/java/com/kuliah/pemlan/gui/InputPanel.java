@@ -36,6 +36,45 @@ public class InputPanel extends JPanel {
         resetForm();
     }
 
+    /** Membuat tombol lebih membulat**/
+    static class RoundedButton extends JButton {
+
+        private int radius = 15; // tingkat kebulatan
+
+        public RoundedButton(String text) {
+            super(text);
+            setContentAreaFilled(false);
+            setFocusPainted(false);
+            setBorderPainted(false);
+            setOpaque(false);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+
+            // background
+            g2.setColor(getBackground());
+            g2.fillRoundRect(0, 0, getWidth(), getHeight(), radius, radius);
+
+            super.paintComponent(g);
+            g2.dispose();
+        }
+
+        @Override
+        protected void paintBorder(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+
+            g2.setColor(getBackground().darker());
+            g2.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, radius, radius);
+            g2.dispose();
+        }
+    }
+
     private void initializeUI() {
         setLayout(new BorderLayout(10, 10));
         setBackground(Color.WHITE);
@@ -104,7 +143,7 @@ public class InputPanel extends JPanel {
 
         // Description
         gbc.gridx = 0; gbc.gridy = row;
-        panel.add(new JLabel("Deskripsi:*"), gbc);
+        panel.add(new JLabel("Deskripsi:" + "*"), gbc);
 
         gbc.gridx = 1;
         descriptionField = new JTextField(20);
@@ -163,7 +202,7 @@ public class InputPanel extends JPanel {
         // Required note
         gbc.gridx = 0; gbc.gridy = row;
         gbc.gridwidth = 2;
-        JLabel noteLabel = new JLabel("* Menandakan field wajib diisi");
+        JLabel noteLabel = new JLabel("(*) Menandakan wajib diisi");
         noteLabel.setFont(new Font("Segoe UI", Font.ITALIC, 11));
         noteLabel.setForeground(Color.RED);
         panel.add(noteLabel, gbc);
@@ -180,9 +219,7 @@ public class InputPanel extends JPanel {
         JButton clearButton = createStyledButton("Reset", new Color(100, 149, 237));
         JButton cancelButton = createStyledButton("Batal", new Color(220, 20, 60));
 
-        saveButton.setForeground(new Color(14,139,34 )); ;
-        clearButton.setForeground(new Color(100, 149, 237));
-        cancelButton.setForeground(new Color(220, 20, 60));
+
 
 
 
@@ -198,7 +235,7 @@ public class InputPanel extends JPanel {
     }
 
     private JButton createStyledButton(String text, Color bgColor) {
-        JButton button = new JButton(text);
+        JButton button = new RoundedButton(text);
         button.setFont(new Font("Segoe UI", Font.BOLD, 13));
         button.setBackground(bgColor);
         button.setForeground(Color.WHITE);
@@ -327,7 +364,7 @@ public class InputPanel extends JPanel {
             notesArea.setText(transaction.getNotes());
 
             // Update title
-            updateTitle("✏️ Edit Transaksi");
+            updateTitle("Edit Transaksi");
         }
     }
 

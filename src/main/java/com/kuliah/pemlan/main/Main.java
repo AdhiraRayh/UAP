@@ -13,7 +13,7 @@ public class Main {
             // Custom UI settings
             UIManager.put("Panel.background", Color.WHITE);
             UIManager.put("Button.background", new Color(100, 149, 237));
-            UIManager.put("Button.foreground", Color.WHITE);
+            UIManager.put("Button.foreground", Color.BLACK);/** Mengubah Warna Pada panel peringatan dari putih ke hitam**/
             UIManager.put("Button.font", new Font("Segoe UI", Font.BOLD, 12));
 
         } catch (Exception e) {

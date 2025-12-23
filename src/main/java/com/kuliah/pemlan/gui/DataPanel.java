@@ -89,6 +89,11 @@ public class DataPanel extends JPanel {
         table.getTableHeader().setBackground(new Color(70, 130, 180));
         table.getTableHeader().setForeground(Color.BLACK);
 
+        /**
+         * Menengahkan Header Dan kata pada Tabel
+         * **/
+
+
         DefaultTableCellRenderer headcen = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
         headcen.setHorizontalAlignment(JLabel.CENTER);
 
@@ -98,6 +103,9 @@ public class DataPanel extends JPanel {
 
 
 
+        /**
+         * menambahkan Ukuran untuk kolom ID dari 60 ke 100
+         * **/
 
         table.getColumnModel().getColumn(0).setPreferredWidth(100);
         table.getColumnModel().getColumn(1).setPreferredWidth(90);
@@ -144,11 +152,11 @@ public class DataPanel extends JPanel {
         JButton sortAmountBtn = createButton(" Sort by Amount", new Color(34, 139, 34));
         JButton sortDateBtn = createButton(" Sort by Date", new Color(138, 43, 226));
 
-        refreshBtn.setForeground(new Color(100, 149, 237));
-        editBtn.setForeground(new Color(255, 165, 0));
-        deleteBtn.setForeground(new Color(220, 20, 60));
-        sortAmountBtn.setForeground(new Color(34, 139, 34));
-        sortDateBtn.setForeground(new Color(138, 43, 226));
+        refreshBtn.setForeground((Color.WHITE));
+        editBtn.setForeground((Color.WHITE));
+        deleteBtn.setForeground((Color.WHITE));
+        sortAmountBtn.setForeground((Color.WHITE));
+        sortDateBtn.setForeground((Color.WHITE));
 
         refreshBtn.addActionListener(e -> refreshTable());
         editBtn.addActionListener(e -> editSelected());
@@ -170,7 +178,7 @@ public class DataPanel extends JPanel {
     }
 
     private JButton createButton(String text, Color bgColor) {
-        JButton button = new JButton(text);
+        JButton button = new DashboardPanel.RoundedButton(text);
         button.setFont(new Font("Segoe UI", Font.BOLD, 12));
         button.setBackground(bgColor);
         button.setForeground(Color.WHITE);
@@ -270,10 +278,13 @@ public class DataPanel extends JPanel {
     private void editSelected() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow == -1) {
+
             JOptionPane.showMessageDialog(this,
                     "Pilih transaksi yang ingin diedit!",
                     "Peringatan",
                     JOptionPane.WARNING_MESSAGE);
+
+
             return;
         }
 

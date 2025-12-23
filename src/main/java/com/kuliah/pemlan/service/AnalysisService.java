@@ -55,9 +55,9 @@ public class AnalysisService {
             insight.append("PENGELUARAN BERDASARKAN EMOSI:\n");
             emotionAnalysis.forEach((emotion, amount) -> {
                 double percentage = (amount / total) * 100;
-                String emoji = getEmojiForEmotion(emotion);
-                insight.append(String.format("%s %s: Rp%,.0f (%.1f%%)\n",
-                        emoji, emotion, amount, percentage));
+
+                insight.append(String.format(" %s: Rp%,.0f (%.1f%%)\n",
+                         emotion, amount, percentage));
             });
             insight.append("\n");
         }
@@ -76,15 +76,5 @@ public class AnalysisService {
         return insight.toString();
     }
 
-    private String getEmojiForEmotion(String emotion) {
-        switch (emotion.toLowerCase()) {
-            case "senang": return "😊";
-            case "sedih": return "😔";
-            case "stress":
-            case "stres": return "😤";
-            case "marah": return "😠";
-            case "netral": return "😐";
-            default: return "❓";
-        }
-    }
+
 }

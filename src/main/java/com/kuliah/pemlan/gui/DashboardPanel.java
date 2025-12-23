@@ -31,6 +31,46 @@ public class DashboardPanel extends JPanel {
         refreshData();
     }
 
+    /** Membuat tombol lebih membulat**/
+    static class RoundedButton extends JButton {
+
+        private int radius = 15; // tingkat kebulatan
+
+        public RoundedButton(String text) {
+            super(text);
+            setContentAreaFilled(false);
+            setFocusPainted(false);
+            setBorderPainted(false);
+            setOpaque(false);
+        }
+
+        @Override
+        protected void paintComponent(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+
+            // background
+            g2.setColor(getBackground());
+            g2.fillRoundRect(0, 0, getWidth(), getHeight(), radius, radius);
+
+            super.paintComponent(g);
+            g2.dispose();
+        }
+
+        @Override
+        protected void paintBorder(Graphics g) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                    RenderingHints.VALUE_ANTIALIAS_ON);
+
+            g2.setColor(getBackground().darker());
+            g2.drawRoundRect(0, 0, getWidth()-1, getHeight()-1, radius, radius);
+            g2.dispose();
+        }
+    }
+
+
     private void initializeUI() {
         setLayout(new BorderLayout(10, 10));
         setBackground(Color.WHITE);
@@ -142,12 +182,12 @@ public class DashboardPanel extends JPanel {
     }
 
     private JButton createActionButton(String text, String page) {
-        JButton button = new JButton(text);
+        JButton button = new RoundedButton(text);
         button.setFont(new Font("Segoe UI", Font.PLAIN, 12));
         button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setMaximumSize(new Dimension(180, 40));
         button.setBackground(new Color(100, 149, 237));
-        button.setForeground(Color.GRAY);
+        button.setForeground(Color.BLACK);
         button.setFocusPainted(false);
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
