@@ -360,6 +360,6 @@ public class InputPanel extends JPanel {
         emotionCombo.setSelectedIndex(0);
         notesArea.setText("");
 
-        updateTitle("➕ Input Transaksi Baru");
+        updateTitle("Input Transaksi Baru");
     }
 }

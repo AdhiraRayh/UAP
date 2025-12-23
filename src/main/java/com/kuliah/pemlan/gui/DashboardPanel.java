@@ -73,10 +73,10 @@ public class DashboardPanel extends JPanel {
         panel.setBackground(Color.WHITE);
         panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
-        totalPanel = createStatCard("💰 Total Pengeluaran", "Rp 0", Color.RED);
-        averagePanel = createStatCard("📊 Rata-rata", "Rp 0", Color.ORANGE);
-        countPanel = createStatCard("📝 Jumlah Transaksi", "0", Color.BLUE);
-        emotionalPanel = createStatCard("😢 Pengeluaran Emosional", "Rp 0", Color.MAGENTA);
+        totalPanel = createStatCard("Total Pengeluaran", "Rp 0", Color.RED);
+        averagePanel = createStatCard("Rata-rata", "Rp 0", Color.ORANGE);
+        countPanel = createStatCard("Jumlah Transaksi", "0", Color.BLUE);
+        emotionalPanel = createStatCard("Pengeluaran Emosional", "Rp 0", Color.MAGENTA);
 
         // Extract value labels from panels
         totalValueLabel = (JLabel) ((JPanel) totalPanel.getComponent(1)).getComponent(0);

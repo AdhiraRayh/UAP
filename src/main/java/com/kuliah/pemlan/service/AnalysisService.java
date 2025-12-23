@@ -52,7 +52,7 @@ public class AnalysisService {
         // Analisis berdasarkan emosi
         Map<String, Double> emotionAnalysis = getAmountByEmotion();
         if (!emotionAnalysis.isEmpty()) {
-            insight.append("💸 PENGELUARAN BERDASARKAN EMOSI:\n");
+            insight.append("PENGELUARAN BERDASARKAN EMOSI:\n");
             emotionAnalysis.forEach((emotion, amount) -> {
                 double percentage = (amount / total) * 100;
                 String emoji = getEmojiForEmotion(emotion);
@@ -69,7 +69,7 @@ public class AnalysisService {
 
         if (impulsiveTotal > 0) {
             double impulsivePercentage = (impulsiveTotal / total) * 100;
-            insight.append(String.format("⚠️  Pengeluaran Impulsif (> Rp100.000): Rp%,.0f (%.1f%%)\n",
+            insight.append(String.format("Pengeluaran Impulsif (> Rp100.000): Rp%,.0f (%.1f%%)\n",
                     impulsiveTotal, impulsivePercentage));
         }
 

@@ -9,6 +9,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
 import java.util.List;
+import javax.swing.table.DefaultTableCellRenderer;
+
+
 
 public class DataPanel extends JPanel {
     private MainFrame parent;
@@ -17,6 +20,8 @@ public class DataPanel extends JPanel {
     private JTable table;
     private JTextField searchField;
     private JComboBox<String> filterCombo;
+
+
 
     public DataPanel(MainFrame parent, TransactionList transactionList) {
         this.parent = parent;
@@ -30,6 +35,7 @@ public class DataPanel extends JPanel {
         setLayout(new BorderLayout(10, 10));
         setBackground(Color.WHITE);
         setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+
 
         // Header
         JPanel headerPanel = new JPanel(new BorderLayout());
@@ -83,8 +89,17 @@ public class DataPanel extends JPanel {
         table.getTableHeader().setBackground(new Color(70, 130, 180));
         table.getTableHeader().setForeground(Color.BLACK);
 
-        // Set column widths
-        table.getColumnModel().getColumn(0).setPreferredWidth(80);
+        DefaultTableCellRenderer headcen = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
+        headcen.setHorizontalAlignment(JLabel.CENTER);
+
+        DefaultTableCellRenderer center = new DefaultTableCellRenderer();
+        center.setHorizontalAlignment(JLabel.CENTER);
+
+
+
+
+
+        table.getColumnModel().getColumn(0).setPreferredWidth(100);
         table.getColumnModel().getColumn(1).setPreferredWidth(90);
         table.getColumnModel().getColumn(2).setPreferredWidth(150);
         table.getColumnModel().getColumn(3).setPreferredWidth(100);
@@ -92,7 +107,16 @@ public class DataPanel extends JPanel {
         table.getColumnModel().getColumn(5).setPreferredWidth(80);
         table.getColumnModel().getColumn(6).setPreferredWidth(200);
 
-        // Add renderer for amount column
+        table.getColumnModel().getColumn(1).setCellRenderer(center);
+        table.getColumnModel().getColumn(2).setCellRenderer(center);
+        table.getColumnModel().getColumn(4).setCellRenderer(center);
+        table.getColumnModel().getColumn(5).setCellRenderer(center);
+
+
+
+
+
+
         table.getColumnModel().getColumn(3).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value,
@@ -102,7 +126,7 @@ public class DataPanel extends JPanel {
 
                 if (value instanceof Double) {
                     label.setText(String.format("Rp%,.0f", (Double) value));
-                    label.setHorizontalAlignment(SwingConstants.RIGHT);
+                    label.setHorizontalAlignment(SwingConstants.CENTER);
                 }
                 return label;
             }

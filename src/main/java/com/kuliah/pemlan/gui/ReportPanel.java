@@ -167,14 +167,14 @@ public class ReportPanel extends JPanel {
                 String emotion = entry.getKey();
                 double amount = entry.getValue();
                 double percentage = (amount / total) * 100;
-                String emoji = getEmojiForEmotion(emotion);
 
-                analysis.append(String.format("%s %s: Rp%,.0f (%.1f%%)\n",
-                        emoji, emotion, amount, percentage));
+
+                analysis.append(String.format("%s: Rp%,.0f (%.1f%%)\n",
+                        emotion, amount, percentage));
             }
 
             // Add insights
-            analysis.append("\n💡 INSIGHT:\n");
+            analysis.append("\nINSIGHT:\n");
             if (emotionData.containsKey("Stres") && emotionData.get("Stres") > total * 0.3) {
                 analysis.append("- Anda banyak spending saat stres (>30%)\n");
                 analysis.append("- Coba teknik relaksasi sebelum belanja\n");
@@ -195,17 +195,6 @@ public class ReportPanel extends JPanel {
         return panel;
     }
 
-    private String getEmojiForEmotion(String emotion) {
-        switch (emotion.toLowerCase()) {
-            case "senang": return "😊";
-            case "sedih": return "😔";
-            case "stres":
-            case "stress": return "😤";
-            case "marah": return "😠";
-            case "netral": return "😐";
-            default: return "❓";
-        }
-    }
 
     private JPanel createInsightTab() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
