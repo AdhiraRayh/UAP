@@ -4,10 +4,33 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.Map;
 
+/**
+ * Kelas utilitas untuk membuat chart sederhana dalam aplikasi.
+ * Kelas ini menyediakan metode untuk membuat pie chart sederhana
+ * untuk visualisasi data pengeluaran.
+ *
+ * @author [AZIZI]
+ * @version 1.0
+ */
 public class ChartHelper {
 
+    /**
+     * Membuat panel yang berisi pie chart sederhana.
+     * Pie chart akan menampilkan distribusi data dengan legenda.
+     *
+     * @param title Judul untuk chart
+     * @param data Map berisi data yang akan divisualisasikan,
+     *             dengan key sebagai label dan value sebagai nilai
+     * @return JPanel yang berisi pie chart dengan judul dan legenda
+     */
     public static JPanel createSimplePieChart(String title, Map<String, Double> data) {
         JPanel chartPanel = new JPanel() {
+            /**
+             * Menggambar komponen chart.
+             * Method ini di-override untuk menggambar pie chart secara custom.
+             *
+             * @param g Objek Graphics untuk menggambar
+             */
             @Override
             protected void paintComponent(Graphics g) {
                 super.paintComponent(g);
@@ -21,6 +44,12 @@ public class ChartHelper {
                 }
             }
 
+            /**
+             * Menggambar pie chart berdasarkan data yang diberikan.
+             *
+             * @param g2d Objek Graphics2D untuk menggambar
+             * @param data Data yang akan divisualisasikan dalam pie chart
+             */
             private void drawPieChart(Graphics2D g2d, Map<String, Double> data) {
                 int centerX = getWidth() / 2;
                 int centerY = getHeight() / 2;
@@ -58,6 +87,14 @@ public class ChartHelper {
                 drawLegend(g2d, data, colors);
             }
 
+            /**
+             * Menggambar legenda untuk pie chart.
+             * Legenda menampilkan label dan nilai untuk setiap segmen pie chart.
+             *
+             * @param g2d Objek Graphics2D untuk menggambar
+             * @param data Data yang divisualisasikan
+             * @param colors Array warna yang digunakan untuk setiap segmen
+             */
             private void drawLegend(Graphics2D g2d, Map<String, Double> data, Color[] colors) {
                 int x = 20;
                 int y = 20;

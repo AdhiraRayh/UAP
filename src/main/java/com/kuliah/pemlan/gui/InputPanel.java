@@ -9,24 +9,60 @@ import java.awt.event.*;
 import java.io.IOException;
 import java.time.LocalDate;
 
+/**
+ * Panel untuk input dan edit data transaksi.
+ * Panel ini menyediakan form untuk menambahkan transaksi baru atau mengedit
+ * transaksi yang sudah ada, dengan validasi data.
+ *
+ * @author [AZIZI]
+ * @version 1.0
+ */
 public class InputPanel extends JPanel {
+    /** Referensi ke frame utama untuk navigasi antar halaman */
     private MainFrame parent;
+
+    /** Daftar transaksi yang akan dimodifikasi */
     private TransactionList transactionList;
+
+    /** Manager file untuk menyimpan perubahan ke file */
     private FileManager fileManager;
 
     // Form components
+    /** Field untuk ID transaksi */
     private JTextField idField;
+
+    /** Field untuk tanggal transaksi */
     private JTextField dateField;
+
+    /** Field untuk deskripsi transaksi */
     private JTextField descriptionField;
+
+    /** Field untuk jumlah transaksi */
     private JTextField amountField;
+
+    /** ComboBox untuk memilih kategori transaksi */
     private JComboBox<String> categoryCombo;
+
+    /** ComboBox untuk memilih emosi saat transaksi */
     private JComboBox<String> emotionCombo;
+
+    /** Area teks untuk catatan tambahan */
     private JTextArea notesArea;
 
     // Mode: ADD or EDIT
+    /** Flag yang menandakan apakah panel dalam mode edit */
     private boolean editMode = false;
+
+    /** ID transaksi yang sedang diedit (jika dalam mode edit) */
     private String editTransactionId;
 
+    /**
+     * Konstruktor untuk membuat InputPanel.
+     *
+     * @param parent Frame utama yang menampung panel ini
+     * @param transactionList Daftar transaksi yang akan dimodifikasi
+     * @param fileManager Manager file untuk menyimpan data
+     */
     public InputPanel(MainFrame parent, TransactionList transactionList, FileManager fileManager) {
         this.parent = parent;
         this.transactionList = transactionList;
@@ -36,11 +72,20 @@ public class InputPanel extends JPanel {
         resetForm();
     }
 
-    /** Membuat tombol lebih membulat**/
+    /**
+     * Kelas tombol dengan tampilan membulat.
+     * Tombol ini memiliki sudut yang melengkung untuk tampilan yang lebih menarik.
+     */
     static class RoundedButton extends JButton {
 
+        /** Radius untuk sudut tombol yang membulat */
         private int radius = 15; // tingkat kebulatan
 
+        /**
+         * Membuat tombol dengan teks tertentu dan tampilan membulat.
+         *
+         * @param text Teks yang akan ditampilkan pada tombol
+         */
         public RoundedButton(String text) {
             super(text);
             setContentAreaFilled(false);
@@ -49,6 +94,11 @@ public class InputPanel extends JPanel {
             setOpaque(false);
         }
 
+        /**
+         * Menggambar komponen tombol dengan latar belakang membulat.
+         *
+         * @param g Objek Graphics untuk menggambar
+         */
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();
@@ -63,6 +113,11 @@ public class InputPanel extends JPanel {
             g2.dispose();
         }
 
+        /**
+         * Menggambar border tombol dengan bentuk membulat.
+         *
+         * @param g Objek Graphics untuk menggambar border
+         */
         @Override
         protected void paintBorder(Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();
@@ -75,6 +130,10 @@ public class InputPanel extends JPanel {
         }
     }
 
+    /**
+     * Menginisialisasi semua komponen UI pada panel input transaksi.
+     * Metode ini mengatur layout, header, form input, dan panel tombol.
+     */
     private void initializeUI() {
         setLayout(new BorderLayout(10, 10));
         setBackground(Color.WHITE);
@@ -108,6 +167,13 @@ public class InputPanel extends JPanel {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Membuat panel form untuk input data transaksi.
+     * Form ini terdiri dari field untuk ID, tanggal, deskripsi, jumlah,
+     * kategori, emosi, dan catatan.
+     *
+     * @return Panel form dengan komponen input
+     */
     private JPanel createFormPanel() {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(Color.WHITE);
@@ -210,6 +276,12 @@ public class InputPanel extends JPanel {
         return panel;
     }
 
+    /**
+     * Membuat panel yang berisi tombol-tombol aksi.
+     * Tombol-tombol termasuk Simpan, Reset, dan Batal.
+     *
+     * @return Panel dengan tombol-tombol aksi
+     */
     private JPanel createButtonPanel() {
         JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 15));
 
@@ -218,10 +290,6 @@ public class InputPanel extends JPanel {
         JButton saveButton = createStyledButton("Simpan", new Color(34, 139, 34));
         JButton clearButton = createStyledButton("Reset", new Color(100, 149, 237));
         JButton cancelButton = createStyledButton("Batal", new Color(220, 20, 60));
-
-
-
-
 
         saveButton.addActionListener(e -> saveTransaction());
         clearButton.addActionListener(e -> resetForm());
@@ -234,6 +302,14 @@ public class InputPanel extends JPanel {
         return panel;
     }
 
+    /**
+     * Membuat tombol dengan teks dan warna latar tertentu.
+     * Tombol ini memiliki efek hover dan menggunakan RoundedButton.
+     *
+     * @param text Teks yang ditampilkan pada tombol
+     * @param bgColor Warna latar belakang tombol
+     * @return Tombol dengan tampilan dan efek yang telah dikonfigurasi
+     */
     private JButton createStyledButton(String text, Color bgColor) {
         JButton button = new RoundedButton(text);
         button.setFont(new Font("Segoe UI", Font.BOLD, 13));
@@ -257,6 +333,11 @@ public class InputPanel extends JPanel {
         return button;
     }
 
+    /**
+     * Menyimpan transaksi ke dalam sistem.
+     * Metode ini memvalidasi input, memproses data, dan menyimpan
+     * transaksi baru atau memperbarui transaksi yang sudah ada.
+     */
     private void saveTransaction() {
         // Validate input
         ValidationService.ValidationResult validation =
@@ -333,6 +414,12 @@ public class InputPanel extends JPanel {
         }
     }
 
+    /**
+     * Mengatur panel ke mode edit untuk transaksi tertentu.
+     * Form akan diisi dengan data transaksi yang dipilih untuk diedit.
+     *
+     * @param transactionId ID transaksi yang akan diedit
+     */
     public void setEditMode(String transactionId) {
         this.editMode = true;
         this.editTransactionId = transactionId;
@@ -368,6 +455,11 @@ public class InputPanel extends JPanel {
         }
     }
 
+    /**
+     * Memperbarui judul panel berdasarkan mode (input baru atau edit).
+     *
+     * @param newTitle Judul baru yang akan ditampilkan
+     */
     private void updateTitle(String newTitle) {
         Component[] components = getComponents();
         for (Component comp : components) {
@@ -385,6 +477,10 @@ public class InputPanel extends JPanel {
         }
     }
 
+    /**
+     * Mereset form ke keadaan awal (mode input baru).
+     * Semua field akan dikosongkan dan judul akan diperbarui.
+     */
     public void resetForm() {
         this.editMode = false;
         this.editTransactionId = null;

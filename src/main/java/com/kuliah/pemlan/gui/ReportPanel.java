@@ -8,16 +8,42 @@ import javax.swing.border.*;
 import java.awt.*;
 import java.util.Map;
 
+/**
+ * Panel untuk menampilkan laporan dan analisis data transaksi.
+ * Panel ini menyediakan berbagai tab untuk menampilkan ringkasan statistik,
+ * analisis per kategori, analisis emosi, dan insight berdasarkan data transaksi.
+ *
+ * @author [AZIZI]
+ * @version 1.0
+ */
 public class ReportPanel extends JPanel {
+    /** Referensi ke frame utama untuk navigasi */
     private MainFrame parent;
+
+    /** Daftar transaksi yang akan dianalisis */
     private TransactionList transactionList;
+
+    /** Area teks untuk menampilkan insight analisis */
     private JTextArea insightArea;
+
+    /** Label untuk menampilkan ringkasan data */
     private JLabel summaryLabel;
+
+    /** Panel untuk tab ringkasan */
     private JPanel summaryTabPanel;
+
+    /** Panel untuk tab analisis kategori */
     private JPanel categoryTabPanel;
+
+    /** Panel untuk tab analisis emosi */
     private JPanel emotionTabPanel;
 
-
+    /**
+     * Konstruktor untuk membuat ReportPanel.
+     *
+     * @param parent Frame utama yang menampung panel ini
+     * @param transactionList Daftar transaksi yang akan dianalisis
+     */
     public ReportPanel(MainFrame parent, TransactionList transactionList) {
         this.parent = parent;
         this.transactionList = transactionList;
@@ -26,10 +52,20 @@ public class ReportPanel extends JPanel {
         refreshCharts();
     }
 
+    /**
+     * Kelas tombol dengan tampilan membulat.
+     * Tombol ini memiliki sudut yang melengkung untuk tampilan yang lebih menarik.
+     */
     static class RoundedButton extends JButton {
 
+        /** Radius untuk sudut tombol yang membulat */
         private int radius = 15; // tingkat kebulatan
 
+        /**
+         * Membuat tombol dengan teks tertentu dan tampilan membulat.
+         *
+         * @param text Teks yang akan ditampilkan pada tombol
+         */
         public RoundedButton(String text) {
             super(text);
             setContentAreaFilled(false);
@@ -38,6 +74,11 @@ public class ReportPanel extends JPanel {
             setOpaque(false);
         }
 
+        /**
+         * Menggambar komponen tombol dengan latar belakang membulat.
+         *
+         * @param g Objek Graphics untuk menggambar
+         */
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();
@@ -52,6 +93,11 @@ public class ReportPanel extends JPanel {
             g2.dispose();
         }
 
+        /**
+         * Menggambar border tombol dengan bentuk membulat.
+         *
+         * @param g Objek Graphics untuk menggambar border
+         */
         @Override
         protected void paintBorder(Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();
@@ -64,6 +110,10 @@ public class ReportPanel extends JPanel {
         }
     }
 
+    /**
+     * Menginisialisasi semua komponen UI pada panel laporan.
+     * Metode ini mengatur layout, header, tabbed pane, dan panel tombol.
+     */
     private void initializeUI() {
         setLayout(new BorderLayout(10, 10));
         setBackground(Color.WHITE);
@@ -89,8 +139,7 @@ public class ReportPanel extends JPanel {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.setFont(new Font("Segoe UI", Font.BOLD, 12));
 
-        /** menegasskan  variabel data untuk diperbarui**/
-
+        /** Menginisialisasi variabel data untuk diperbarui **/
         summaryTabPanel = createSummaryTab();
         categoryTabPanel = createCategoryTab();
         emotionTabPanel = createEmotionTab();
@@ -116,6 +165,12 @@ public class ReportPanel extends JPanel {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Membuat tombol kecil dengan tampilan membulat.
+     *
+     * @param text Teks yang akan ditampilkan pada tombol
+     * @return Tombol dengan tampilan dan ukuran yang telah dikonfigurasi
+     */
     private JButton createSmallButton(String text) {
         JButton button = new RoundedButton(text);
         button.setFont(new Font("Segoe UI", Font.PLAIN, 12));
@@ -127,6 +182,13 @@ public class ReportPanel extends JPanel {
         return button;
     }
 
+    /**
+     * Membuat panel untuk tab ringkasan.
+     * Panel ini menampilkan statistik dasar seperti total pengeluaran,
+     * rata-rata transaksi, dan jumlah transaksi.
+     *
+     * @return Panel untuk tab ringkasan
+     */
     private JPanel createSummaryTab() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBackground(Color.WHITE);
@@ -155,6 +217,14 @@ public class ReportPanel extends JPanel {
         return panel;
     }
 
+    /**
+     * Membuat kotak statistik dengan judul, nilai, dan warna tertentu.
+     *
+     * @param title Judul statistik
+     * @param value Nilai statistik yang diformat
+     * @param color Warna untuk nilai statistik
+     * @return Panel kotak statistik dengan border berwarna
+     */
     private JPanel createStatBox(String title, String value, Color color) {
         JPanel panel = new JPanel(new BorderLayout(5, 5));
         panel.setBackground(Color.WHITE);
@@ -176,6 +246,12 @@ public class ReportPanel extends JPanel {
         return panel;
     }
 
+    /**
+     * Membuat panel untuk tab analisis per kategori.
+     * Panel ini menampilkan grafik pie untuk distribusi pengeluaran berdasarkan kategori.
+     *
+     * @return Panel untuk tab analisis kategori
+     */
     private JPanel createCategoryTab() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
@@ -197,6 +273,12 @@ public class ReportPanel extends JPanel {
         return panel;
     }
 
+    /**
+     * Membuat panel untuk tab analisis emosi.
+     * Panel ini menampilkan analisis teks tentang pengeluaran berdasarkan kondisi emosi.
+     *
+     * @return Panel untuk tab analisis emosi
+     */
     private JPanel createEmotionTab() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
@@ -217,7 +299,6 @@ public class ReportPanel extends JPanel {
                 double amount = entry.getValue();
                 double percentage = (amount / total) * 100;
 
-
                 analysis.append(String.format("%s: Rp%,.0f (%.1f%%)\n",
                         emotion, amount, percentage));
             }
@@ -232,8 +313,7 @@ public class ReportPanel extends JPanel {
             JTextArea textArea = new JTextArea(analysis.toString());
             textArea.setEditable(false);
             textArea.setFont(new Font("Segoe UI", Font.PLAIN, 12));
-            textArea.setBackground(new Color(248, 248, 255));
-
+            textArea.setBackground(new Color(16, 16, 30));
 
             JScrollPane scrollPane = new JScrollPane(textArea);
             panel.add(scrollPane, BorderLayout.CENTER);
@@ -245,7 +325,12 @@ public class ReportPanel extends JPanel {
         return panel;
     }
 
-
+    /**
+     * Membuat panel untuk tab insight dan rekomendasi.
+     * Panel ini menampilkan analisis mendalam dan saran perbaikan berdasarkan data transaksi.
+     *
+     * @return Panel untuk tab insight
+     */
     private JPanel createInsightTab() {
         JPanel panel = new JPanel(new BorderLayout(10, 10));
         panel.setBackground(Color.WHITE);
@@ -288,6 +373,10 @@ public class ReportPanel extends JPanel {
         return panel;
     }
 
+    /**
+     * Memperbarui semua chart dan data pada panel laporan.
+     * Method ini akan memperbarui ringkasan, semua tab, dan insight.
+     */
     public void refreshCharts() {
         // Update summary
         int count = transactionList.getCount();
@@ -311,6 +400,9 @@ public class ReportPanel extends JPanel {
         repaint();
     }
 
+    /**
+     * Memperbarui tab ringkasan dengan data terbaru.
+     */
     private void refreshSummaryTab() {
         if (summaryTabPanel != null) {
             summaryTabPanel.removeAll();
@@ -340,6 +432,9 @@ public class ReportPanel extends JPanel {
         }
     }
 
+    /**
+     * Memperbarui tab analisis kategori dengan data terbaru.
+     */
     private void refreshCategoryTab() {
         if (categoryTabPanel != null) {
             categoryTabPanel.removeAll();
@@ -365,6 +460,9 @@ public class ReportPanel extends JPanel {
         }
     }
 
+    /**
+     * Memperbarui tab analisis emosi dengan data terbaru.
+     */
     private void refreshEmotionTab() {
         if (emotionTabPanel != null) {
             emotionTabPanel.removeAll();

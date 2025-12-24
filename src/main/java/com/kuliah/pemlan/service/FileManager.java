@@ -5,14 +5,32 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Kelas untuk mengelola penyimpanan dan pembacaan data transaksi dari file CSV.
+ * Kelas ini bertanggung jawab untuk menyimpan data transaksi ke file dan
+ * memuat data transaksi dari file dengan penanganan error yang baik.
+ *
+ * @author [AZIZI]
+ * @version 1.0
+ */
 public class FileManager {
+    /** Nama file untuk menyimpan data transaksi */
     private static final String FILE_NAME = "transactions.csv";
 
+    /**
+     * Menyimpan daftar transaksi ke file CSV.
+     * Format file: id,date,description,amount,category,emotion,notes
+     *
+     * @param transactions Daftar transaksi yang akan disimpan
+     * @throws IOException Jika terjadi kesalahan I/O saat menulis file
+     */
     public void saveTransactions(List<Transaction> transactions) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(FILE_NAME))) {
+            // Tulis header
             writer.write("id,date,description,amount,category,emotion,notes");
             writer.newLine();
 
+            // Tulis setiap transaksi
             for (Transaction transaction : transactions) {
                 writer.write(transaction.toCSV());
                 writer.newLine();
@@ -20,10 +38,18 @@ public class FileManager {
         }
     }
 
+    /**
+     * Memuat daftar transaksi dari file CSV.
+     * Jika file tidak ada, mengembalikan daftar kosong.
+     *
+     * @return List yang berisi transaksi-transaksi yang berhasil dimuat
+     * @throws IOException Jika terjadi kesalahan I/O saat membaca file
+     */
     public List<Transaction> loadTransactions() throws IOException {
         List<Transaction> transactions = new ArrayList<>();
         File file = new File(FILE_NAME);
 
+        // Jika file tidak ada, kembalikan daftar kosong
         if (!file.exists()) {
             return transactions;
         }
@@ -35,11 +61,14 @@ public class FileManager {
 
             while ((line = reader.readLine()) != null) {
                 lineNumber++;
+
+                // Lewati header
                 if (isFirstLine) {
                     isFirstLine = false;
                     continue;
                 }
 
+                // Lewati baris kosong
                 if (!line.trim().isEmpty()) {
                     try {
                         // Coba repair line jika corrupt
@@ -47,6 +76,7 @@ public class FileManager {
                         Transaction transaction = new Transaction(repairedLine);
                         transactions.add(transaction);
                     } catch (Exception e) {
+                        // Log error tetapi lanjutkan membaca baris berikutnya
                         System.err.println("Error parsing line " + lineNumber + ": " + line);
                         System.err.println("Error: " + e.getMessage());
                         // Skip line yang benar-benar rusak
@@ -59,9 +89,12 @@ public class FileManager {
     }
 
     /**
-     * Method untuk memperbaiki line CSV yang corrupt
+     * Method untuk memperbaiki line CSV yang corrupt.
      * Contoh: "TRX2512240208001,2025-12-24,mboh,100000,00,Makanan & Minuman,Senang,bali mie"
      * Harusnya: "TRX2512240208001,2025-12-24,mboh,100000,Makanan & Minuman,Senang,bali mie"
+     *
+     * @param line Baris CSV yang mungkin corrupt
+     * @return Baris CSV yang sudah diperbaiki
      */
     private String repairCSVLine(String line) {
         String[] parts = line.split(",", -1); // -1 untuk keep empty strings

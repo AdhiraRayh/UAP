@@ -1,7 +1,9 @@
 id,date,description,amount,category,emotion,notes
-TRX2512222103001,2025-12-22,mboh,100000,00,Makanan & Minuman,Netral,sehat
-TRX2512241106001,2025-12-24,waduh,2000,00,Makanan & Minuman,Sedih,haduh
-TRX2512241120001,2025-12-24,ngoding,1000,00,Pendidikan,Netral,test1
-TRX2512241122001,2025-12-24,wes,4000,00,Transportasi,Senang,bensin
-TRX2512241128001,2025-12-24,yey,70000,00,Kesehatan,Senang,apapapapap
-TRX2512241130001,2025-12-24,HAH,1000000,00,Hiburan,Marah,HAHEHO
+TRX2512241354002,2025-12-24,Warkop,8000,00,Makanan & Minuman,Senang,Minuman
+TRX2512241354003,2025-12-23,Cafe,52000,00,Hiburan,Stres,Ngopi
+TRX2512241355004,2025-12-24,Indomaret,17000,00,Belanja,Netral,ytta
+TRX2512241356005,2025-12-22,Pertamina,152000,00,Transportasi,Sedih,Bensin
+TRX2512241407001,2025-12-24,haha,45000,00,Belanja,Marah,afa
+TRX2512241408002,2025-12-24,zsa,450000,00,Tagihan,Marah,owh syitt
+TRX2512241408003,2025-12-24,jojo,78000,00,Hiburan,Stres,asq
+TRX2512241408004,2025-12-22,joj1,88000,00,Hiburan,Stres,asiq banget

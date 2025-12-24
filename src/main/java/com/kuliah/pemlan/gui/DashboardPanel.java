@@ -7,24 +7,56 @@ import java.awt.*;
 
 import java.util.List;
 
+/**
+ * Panel dashboard yang menampilkan ringkasan statistik transaksi dan aksi cepat.
+ * Panel ini menampilkan total pengeluaran, rata-rata transaksi, jumlah transaksi,
+ * pengeluaran emosional, serta daftar transaksi terakhir.
+ *
+ * @author [AZIZI]
+ * @version 1.0
+ */
 public class DashboardPanel extends JPanel {
+    /** Referensi ke frame utama untuk navigasi antar halaman */
     private MainFrame parent;
+
+    /** Daftar transaksi yang akan ditampilkan dan dianalisis */
     private TransactionList transactionList;
 
     // UI Components
+    /** Panel untuk menampilkan total pengeluaran */
     private JPanel totalPanel;
+
+    /** Panel untuk menampilkan rata-rata transaksi */
     private JPanel averagePanel;
+
+    /** Panel untuk menampilkan jumlah transaksi */
     private JPanel countPanel;
+
+    /** Panel untuk menampilkan pengeluaran emosional */
     private JPanel emotionalPanel;
 
     // Label components inside panels
+    /** Label untuk nilai total pengeluaran */
     private JLabel totalValueLabel;
+
+    /** Label untuk nilai rata-rata transaksi */
     private JLabel averageValueLabel;
+
+    /** Label untuk nilai jumlah transaksi */
     private JLabel countValueLabel;
+
+    /** Label untuk nilai pengeluaran emosional */
     private JLabel emotionalValueLabel;
 
+    /** Tabel untuk menampilkan transaksi terakhir */
     private JTable recentTransactionsTable;
 
+    /**
+     * Konstruktor untuk membuat DashboardPanel.
+     *
+     * @param parent Frame utama yang menampung panel ini
+     * @param transactionList Daftar transaksi yang akan ditampilkan
+     */
     public DashboardPanel(MainFrame parent, TransactionList transactionList) {
         this.parent = parent;
         this.transactionList = transactionList;
@@ -33,11 +65,20 @@ public class DashboardPanel extends JPanel {
         refreshData();
     }
 
-    /** Membuat tombol lebih membulat**/
+    /**
+     * Kelas tombol dengan tampilan membulat.
+     * Tombol ini memiliki sudut yang melengkung untuk tampilan yang lebih menarik.
+     */
     static class RoundedButton extends JButton {
 
+        /** Radius untuk sudut tombol yang membulat */
         private int radius = 15; // tingkat kebulatan
 
+        /**
+         * Membuat tombol dengan teks tertentu dan tampilan membulat.
+         *
+         * @param text Teks yang akan ditampilkan pada tombol
+         */
         public RoundedButton(String text) {
             super(text);
             setContentAreaFilled(false);
@@ -46,6 +87,11 @@ public class DashboardPanel extends JPanel {
             setOpaque(false);
         }
 
+        /**
+         * Menggambar komponen tombol dengan latar belakang membulat.
+         *
+         * @param g Objek Graphics untuk menggambar
+         */
         @Override
         protected void paintComponent(Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();
@@ -60,6 +106,11 @@ public class DashboardPanel extends JPanel {
             g2.dispose();
         }
 
+        /**
+         * Menggambar border tombol dengan bentuk membulat.
+         *
+         * @param g Objek Graphics untuk menggambar border
+         */
         @Override
         protected void paintBorder(Graphics g) {
             Graphics2D g2 = (Graphics2D) g.create();
@@ -73,6 +124,10 @@ public class DashboardPanel extends JPanel {
     }
 
 
+    /**
+     * Menginisialisasi semua komponen UI pada panel dashboard.
+     * Metode ini mengatur layout, header, panel statistik, aksi cepat, dan tabel transaksi.
+     */
     private void initializeUI() {
         setLayout(new BorderLayout(10, 10));
         setBackground(Color.WHITE);
@@ -110,6 +165,11 @@ public class DashboardPanel extends JPanel {
         add(recentPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Membuat panel yang berisi kartu statistik (total, rata-rata, jumlah, emosional).
+     *
+     * @return Panel yang berisi 4 kartu statistik dalam layout grid 2x2
+     */
     private JPanel createStatsPanel() {
         JPanel panel = new JPanel(new GridLayout(2, 2, 15, 15));
         panel.setBackground(Color.WHITE);
@@ -134,6 +194,14 @@ public class DashboardPanel extends JPanel {
         return panel;
     }
 
+    /**
+     * Membuat kartu statistik individual dengan judul, nilai, dan warna tertentu.
+     *
+     * @param title Judul kartu statistik
+     * @param value Nilai awal yang ditampilkan pada kartu
+     * @param color Warna untuk nilai dan border kartu
+     * @return Panel kartu statistik dengan layout BorderLayout
+     */
     private JPanel createStatCard(String title, String value, Color color) {
         JPanel card = new JPanel(new BorderLayout(10, 10));
         card.setBackground(Color.WHITE);
@@ -157,6 +225,13 @@ public class DashboardPanel extends JPanel {
         return card;
     }
 
+    /**
+     * Membuat panel aksi cepat untuk navigasi ke halaman lain.
+     * Panel ini berisi tombol-tombol untuk menambah transaksi, melihat data,
+     * melihat laporan, dan melakukan analisis.
+     *
+     * @return Panel dengan tombol-tombol aksi cepat dalam layout vertikal
+     */
     private JPanel createQuickActionsPanel() {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
@@ -183,6 +258,13 @@ public class DashboardPanel extends JPanel {
         return panel;
     }
 
+    /**
+     * Membuat tombol aksi dengan teks dan target halaman tertentu.
+     *
+     * @param text Teks yang ditampilkan pada tombol
+     * @param page Identifikasi halaman tujuan navigasi
+     * @return Tombol dengan tampilan membulat dan action listener
+     */
     private JButton createActionButton(String text, String page) {
         JButton button = new RoundedButton(text);
         button.setFont(new Font("Segoe UI", Font.PLAIN, 12));
@@ -200,10 +282,12 @@ public class DashboardPanel extends JPanel {
 
 
     /**
-     * Membuat isi pada dashboard panel dimana sebelumnya tidak menampilkan apapun
+     * Membuat panel yang berisi tabel transaksi terakhir.
+     * Sebelumnya panel ini tidak menampilkan apapun, sekarang menampilkan
+     * tabel dengan kolom Tanggal, Deskripsi, Jumlah, dan Emosi.
      *
-     *
-     * **/
+     * @return Panel dengan tabel transaksi terakhir
+     */
     private JPanel createRecentTransactionsPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
@@ -231,6 +315,12 @@ public class DashboardPanel extends JPanel {
         return panel;
     }
 
+    /**
+     * Memperbarui data yang ditampilkan pada dashboard.
+     * Metode ini menghitung ulang statistik dan memperbarui label serta tabel.
+     * Pengeluaran emosional dihitung dari transaksi dengan emosi non-netral
+     * dan jumlah di atas Rp 50.000.
+     */
     public void refreshData() {
         // Update statistics
         double total = transactionList.getTotalAmount();
@@ -262,6 +352,10 @@ public class DashboardPanel extends JPanel {
         updateRecentTransactions();
     }
 
+    /**
+     * Memperbarui tabel transaksi terakhir dengan 5 transaksi terbaru.
+     * Jika terdapat kurang dari 5 transaksi, semua transaksi akan ditampilkan.
+     */
     private void updateRecentTransactions() {
         if (recentTransactionsTable != null) {
             DefaultTableModel model = (DefaultTableModel) recentTransactionsTable.getModel();

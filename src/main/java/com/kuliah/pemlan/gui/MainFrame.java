@@ -6,24 +6,55 @@ import java.io.IOException;
 import com.kuliah.pemlan.model.*;
 import com.kuliah.pemlan.service.*;
 
+/**
+ * Frame utama aplikasi Life Insight Manager+.
+ * Kelas ini berfungsi sebagai wadah utama yang mengatur navigasi antara
+ * berbagai panel (Dashboard, Data, Input, Report) menggunakan CardLayout.
+ *
+ * @author [AZIZI]
+ * @version 1.0
+ */
 public class MainFrame extends JFrame {
+    /** Layout untuk mengelola perpindahan antar panel */
     private CardLayout cardLayout;
+
+    /** Panel utama yang berisi semua panel konten */
     private JPanel mainPanel;
+
+    /** Daftar transaksi yang digunakan oleh seluruh aplikasi */
     private TransactionList transactionList;
+
+    /** Manager file untuk operasi baca/tulis data transaksi */
     private FileManager fileManager;
 
     // Panels
+    /** Panel dashboard untuk menampilkan ringkasan statistik */
     private DashboardPanel dashboardPanel;
+
+    /** Panel data untuk menampilkan dan mengelola tabel transaksi */
     private DataPanel dataPanel;
+
+    /** Panel input untuk menambah atau mengedit transaksi */
     private InputPanel inputPanel;
+
+    /** Panel laporan untuk menampilkan grafik analisis */
     private ReportPanel reportPanel;
 
-    // DI FILE: MainFrame.java
+    /**
+     * Menampilkan form edit untuk transaksi dengan ID tertentu.
+     * Method ini akan beralih ke panel INPUT dan mengatur mode edit.
+     *
+     * @param transactionId ID transaksi yang akan diedit
+     */
     public void showEditForm(String transactionId) {
         cardLayout.show(mainPanel, "INPUT");
         inputPanel.setEditMode(transactionId);
     }
 
+    /**
+     * Konstruktor untuk membuat MainFrame.
+     * Menginisialisasi frame, memuat data, dan menyiapkan UI.
+     */
     public MainFrame() {
         setTitle("Life Insight Manager+ - Personal Behavior & Emotional Spending Analyzer");
         setSize(1000, 650);
@@ -43,6 +74,10 @@ public class MainFrame extends JFrame {
         setVisible(true);
     }
 
+    /**
+     * Memuat data transaksi dari file menggunakan FileManager.
+     * Jika gagal memuat, aplikasi akan membuat data baru.
+     */
     private void loadData() {
         try {
             java.util.List<Transaction> transactions = fileManager.loadTransactions();
@@ -57,6 +92,10 @@ public class MainFrame extends JFrame {
         }
     }
 
+    /**
+     * Menginisialisasi semua komponen UI pada frame utama.
+     * Membuat panel navigasi, panel konten, dan status bar.
+     */
     private void initializeUI() {
         // Main layout with CardLayout
         cardLayout = new CardLayout();
@@ -72,8 +111,6 @@ public class MainFrame extends JFrame {
         reportPanel = new ReportPanel(this, transactionList);
 
         // Add panels to CardLayout
-
-
         mainPanel.add(dashboardPanel, "DASHBOARD");
         mainPanel.add(dataPanel, "DATA");
         mainPanel.add(inputPanel, "INPUT");
@@ -88,6 +125,11 @@ public class MainFrame extends JFrame {
         add(createStatusBar(), BorderLayout.SOUTH);
     }
 
+    /**
+     * Membuat panel navigasi dengan tombol-tombol untuk berpindah antar panel.
+     *
+     * @return Panel navigasi dengan 4 tombol (Dashboard, Data, Input, Report)
+     */
     private JPanel createNavigationPanel() {
         JPanel navPanel = new JPanel(new GridLayout(1, 4));
         navPanel.setBackground(new Color(70, 130, 180));
@@ -95,7 +137,6 @@ public class MainFrame extends JFrame {
 
         String[] buttons = {" Dashboard", " Data", " Input", " Report"};
         String[] cards = {"DASHBOARD", "DATA", "INPUT", "REPORT"};
-
 
         for (int i = 0; i < buttons.length; i++) {
             JButton button = new JButton(buttons[i]);
@@ -117,6 +158,11 @@ public class MainFrame extends JFrame {
         return navPanel;
     }
 
+    /**
+     * Membuat status bar yang menampilkan informasi aplikasi dan jumlah transaksi.
+     *
+     * @return Panel status bar dengan informasi versi dan jumlah transaksi
+     */
     private JPanel createStatusBar() {
         JPanel statusPanel = new JPanel(new BorderLayout());
         statusPanel.setBackground(new Color(240, 240, 240));
@@ -134,6 +180,11 @@ public class MainFrame extends JFrame {
         return statusPanel;
     }
 
+    /**
+     * Memperbarui panel yang sedang aktif berdasarkan nama panel.
+     *
+     * @param panelName Nama panel yang perlu diperbarui (DASHBOARD, DATA, REPORT)
+     */
     private void refreshCurrentPanel(String panelName) {
         switch (panelName) {
             case "DASHBOARD":
@@ -148,6 +199,10 @@ public class MainFrame extends JFrame {
         }
     }
 
+    /**
+     * Memperbarui semua panel dan data di aplikasi.
+     * Method ini dipanggil setelah operasi yang mempengaruhi data transaksi.
+     */
     public void refreshAllData() {
         dashboardPanel.refreshData();
         dataPanel.refreshTable();
@@ -157,6 +212,9 @@ public class MainFrame extends JFrame {
         updateStatusBar();
     }
 
+    /**
+     * Memperbarui status bar dengan jumlah transaksi terkini.
+     */
     private void updateStatusBar() {
         Component[] components = getContentPane().getComponents();
         for (Component comp : components) {
@@ -174,6 +232,11 @@ public class MainFrame extends JFrame {
         }
     }
 
+    /**
+     * Menampilkan halaman tertentu berdasarkan nama halaman.
+     *
+     * @param page Nama halaman yang akan ditampilkan (dashboard, data, input, report)
+     */
     public void showPage(String page) {
         cardLayout.show(mainPanel, page.toUpperCase());
         refreshCurrentPanel(page.toUpperCase());

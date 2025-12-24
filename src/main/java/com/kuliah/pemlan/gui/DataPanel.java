@@ -11,18 +11,39 @@ import java.io.IOException;
 import java.util.List;
 import javax.swing.table.DefaultTableCellRenderer;
 
-
-
+/**
+ * Panel untuk menampilkan dan mengelola data transaksi dalam bentuk tabel.
+ * Panel ini menyediakan fungsi pencarian, filter, pengurutan, dan operasi CRUD
+ * pada data transaksi.
+ *
+ * @author [AZIZI]
+ * @version 1.0
+ */
 public class DataPanel extends JPanel {
+    /** Referensi ke frame utama untuk navigasi antar halaman */
     private MainFrame parent;
+
+    /** Daftar transaksi yang akan ditampilkan dan dikelola */
     private TransactionList transactionList;
+
+    /** Model tabel untuk menampung data transaksi */
     private DefaultTableModel tableModel;
+
+    /** Tabel untuk menampilkan data transaksi */
     private JTable table;
+
+    /** Field untuk pencarian transaksi */
     private JTextField searchField;
+
+    /** ComboBox untuk filter kategori transaksi */
     private JComboBox<String> filterCombo;
 
-
-
+    /**
+     * Konstruktor untuk membuat DataPanel.
+     *
+     * @param parent Frame utama yang menampung panel ini
+     * @param transactionList Daftar transaksi yang akan ditampilkan
+     */
     public DataPanel(MainFrame parent, TransactionList transactionList) {
         this.parent = parent;
         this.transactionList = transactionList;
@@ -31,11 +52,15 @@ public class DataPanel extends JPanel {
         refreshTable();
     }
 
+    /**
+     * Menginisialisasi semua komponen UI pada panel data transaksi.
+     * Metode ini mengatur layout, header, kontrol pencarian/filter,
+     * tabel data, dan panel tombol aksi.
+     */
     private void initializeUI() {
         setLayout(new BorderLayout(10, 10));
         setBackground(Color.WHITE);
         setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
-
 
         // Header
         JPanel headerPanel = new JPanel(new BorderLayout());
@@ -91,22 +116,17 @@ public class DataPanel extends JPanel {
 
         /**
          * Menengahkan Header Dan kata pada Tabel
-         * **/
-
-
+         */
         DefaultTableCellRenderer headcen = (DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer();
         headcen.setHorizontalAlignment(JLabel.CENTER);
 
         DefaultTableCellRenderer center = new DefaultTableCellRenderer();
         center.setHorizontalAlignment(JLabel.CENTER);
 
-
-
-
         /**
-         * menambahkan Ukuran untuk kolom ID dari 60 ke 100
-         * **/
-
+         * Menambahkan ukuran untuk kolom ID dari 60 ke 100
+         * dan mengatur lebar preferensi untuk setiap kolom
+         */
         table.getColumnModel().getColumn(0).setPreferredWidth(100);
         table.getColumnModel().getColumn(1).setPreferredWidth(90);
         table.getColumnModel().getColumn(2).setPreferredWidth(150);
@@ -115,16 +135,13 @@ public class DataPanel extends JPanel {
         table.getColumnModel().getColumn(5).setPreferredWidth(80);
         table.getColumnModel().getColumn(6).setPreferredWidth(200);
 
+        // Terapkan perataan tengah untuk kolom tertentu
         table.getColumnModel().getColumn(1).setCellRenderer(center);
         table.getColumnModel().getColumn(2).setCellRenderer(center);
         table.getColumnModel().getColumn(4).setCellRenderer(center);
         table.getColumnModel().getColumn(5).setCellRenderer(center);
 
-
-
-
-
-
+        // Render khusus untuk kolom jumlah (format mata uang)
         table.getColumnModel().getColumn(3).setCellRenderer(new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value,
@@ -144,7 +161,6 @@ public class DataPanel extends JPanel {
 
         // Button Panel
         JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
-
 
         JButton refreshBtn = createButton(" Refresh", new Color(100, 149, 237));
         JButton editBtn = createButton(" Edit", new Color(255, 165, 0));
@@ -177,6 +193,14 @@ public class DataPanel extends JPanel {
         add(buttonPanel, BorderLayout.SOUTH);
     }
 
+    /**
+     * Membuat tombol dengan teks dan warna latar tertentu.
+     * Tombol ini memiliki efek hover dan menggunakan RoundedButton dari DashboardPanel.
+     *
+     * @param text Teks yang ditampilkan pada tombol
+     * @param bgColor Warna latar belakang tombol
+     * @return Tombol dengan tampilan dan efek yang telah dikonfigurasi
+     */
     private JButton createButton(String text, Color bgColor) {
         JButton button = new DashboardPanel.RoundedButton(text);
         button.setFont(new Font("Segoe UI", Font.BOLD, 12));
@@ -200,6 +224,10 @@ public class DataPanel extends JPanel {
         return button;
     }
 
+    /**
+     * Memperbarui tabel dengan data transaksi terbaru dari transactionList.
+     * Semua baris pada tabel akan dihapus dan diisi ulang dengan data terkini.
+     */
     public void refreshTable() {
         tableModel.setRowCount(0);
 
@@ -217,6 +245,10 @@ public class DataPanel extends JPanel {
         }
     }
 
+    /**
+     * Memfilter tabel berdasarkan teks pencarian dan kategori yang dipilih.
+     * Filter diterapkan pada kolom ID, deskripsi, kategori, emosi, dan catatan.
+     */
     private void filterTable() {
         String searchText = searchField.getText().toLowerCase();
         String selectedCategory = (String) filterCombo.getSelectedItem();
@@ -250,16 +282,29 @@ public class DataPanel extends JPanel {
         sorter.setRowFilter(filter);
     }
 
+    /**
+     * Mengurutkan tabel berdasarkan jumlah transaksi secara descending.
+     * Memanggil metode sortByAmount dari transactionList dan memperbarui tabel.
+     */
     private void sortByAmount() {
         List<Transaction> sorted = transactionList.sortByAmount(false); // Descending
         updateTable(sorted);
     }
 
+    /**
+     * Mengurutkan tabel berdasarkan tanggal transaksi secara descending.
+     * Memanggil metode sortByDate dari transactionList dan memperbarui tabel.
+     */
     private void sortByDate() {
         List<Transaction> sorted = transactionList.sortByDate(false); // Descending
         updateTable(sorted);
     }
 
+    /**
+     * Memperbarui tabel dengan daftar transaksi yang diberikan.
+     *
+     * @param transactions Daftar transaksi yang akan ditampilkan di tabel
+     */
     private void updateTable(List<Transaction> transactions) {
         tableModel.setRowCount(0);
         for (Transaction t : transactions) {
@@ -275,7 +320,11 @@ public class DataPanel extends JPanel {
         }
     }
 
-    // DI FILE: DataPanel.java
+    /**
+     * Menangani aksi edit untuk transaksi yang dipilih.
+     * Memeriksa apakah ada baris yang dipilih, kemudian memanggil
+     * method showEditForm pada parent frame dengan ID transaksi.
+     */
     private void editSelected() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow == -1) {
@@ -294,6 +343,11 @@ public class DataPanel extends JPanel {
         parent.showEditForm(transactionId);
     }
 
+    /**
+     * Menangani aksi penghapusan untuk transaksi yang dipilih.
+     * Meminta konfirmasi pengguna sebelum menghapus transaksi,
+     * kemudian menyimpan perubahan ke file dan memperbarui tampilan.
+     */
     private void deleteSelected() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow == -1) {

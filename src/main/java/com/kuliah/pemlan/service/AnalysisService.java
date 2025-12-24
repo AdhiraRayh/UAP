@@ -7,13 +7,32 @@ import java.util.List;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
+/**
+ * Layanan untuk melakukan analisis data transaksi.
+ * Kelas ini menyediakan berbagai metode untuk menganalisis data transaksi
+ * seperti pengelompokan berdasarkan kategori dan emosi, serta generasi insight.
+ *
+ * @author [AZIZI]
+ * @version 1.0
+ */
 public class AnalysisService {
+    /** Daftar transaksi yang akan dianalisis */
     private TransactionList transactionList;
 
+    /**
+     * Konstruktor untuk membuat AnalysisService.
+     *
+     * @param transactionList Objek TransactionList yang berisi data transaksi
+     */
     public AnalysisService(TransactionList transactionList) {
         this.transactionList = transactionList;
     }
 
+    /**
+     * Mendapatkan total pengeluaran yang dikelompokkan berdasarkan kategori.
+     *
+     * @return Map dengan key sebagai nama kategori dan value sebagai total pengeluaran
+     */
     public Map<String, Double> getAmountByCategory() {
         return transactionList.getAllTransactions().stream()
                 .collect(Collectors.groupingBy(
@@ -22,6 +41,11 @@ public class AnalysisService {
                 ));
     }
 
+    /**
+     * Mendapatkan total pengeluaran yang dikelompokkan berdasarkan kondisi emosi.
+     *
+     * @return Map dengan key sebagai nama emosi dan value sebagai total pengeluaran
+     */
     public Map<String, Double> getAmountByEmotion() {
         return transactionList.getAllTransactions().stream()
                 .collect(Collectors.groupingBy(
@@ -30,6 +54,14 @@ public class AnalysisService {
                 ));
     }
 
+    /**
+     * Mendapatkan daftar transaksi impulsif berdasarkan threshold tertentu.
+     * Transaksi dianggap impulsif jika jumlahnya melebihi threshold dan
+     * tidak memiliki emosi "Netral".
+     *
+     * @param threshold Batas jumlah uang untuk dianggap sebagai transaksi impulsif
+     * @return List transaksi yang dianggap impulsif
+     */
     public List<Transaction> getImpulsiveTransactions(double threshold) {
         return transactionList.getAllTransactions().stream()
                 .filter(t -> t.getAmount() > threshold &&
@@ -37,6 +69,12 @@ public class AnalysisService {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Menghasilkan insight analisis dari data transaksi.
+     * Insight mencakup statistik dasar, analisis emosi, dan identifikasi pola.
+     *
+     * @return String berisi insight analisis yang diformat
+     */
     public String generateInsight() {
         StringBuilder insight = new StringBuilder();
         insight.append("ANALISIS PENGELUARAN EMOSIONAL\n\n");
@@ -75,6 +113,4 @@ public class AnalysisService {
 
         return insight.toString();
     }
-
-
 }
