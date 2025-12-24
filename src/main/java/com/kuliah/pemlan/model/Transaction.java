@@ -2,6 +2,8 @@ package com.kuliah.pemlan.model;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Transaction {
     private String id;
@@ -24,16 +26,40 @@ public class Transaction {
     }
 
     public Transaction(String csvLine) {
-        String[] data = csvLine.split(",", 7);
-        if (data.length >= 7) {
-            this.id = data[0];
-            this.date = LocalDate.parse(data[1]);
-            this.description = data[2];
-            this.amount = Double.parseDouble(data[3]);
-            this.category = data[4];
-            this.emotion = data[5];
-            this.notes = data[6];
+        // Gunakan regex yang lebih tepat untuk parsing CSV
+        // Ini menangani field yang mengandung koma dalam quotes
+        List<String> data = parseCSVLine(csvLine);
+
+        if (data.size() >= 7) {
+            this.id = data.get(0);
+            this.date = LocalDate.parse(data.get(1));
+            this.description = data.get(2);
+            this.amount = Double.parseDouble(data.get(3));
+            this.category = data.get(4);
+            this.emotion = data.get(5);
+            this.notes = data.get(6);
         }
+    }
+
+    private List<String> parseCSVLine(String csvLine) {
+        List<String> result = new ArrayList<>();
+        StringBuilder current = new StringBuilder();
+        boolean inQuotes = false;
+
+        for (int i = 0; i < csvLine.length(); i++) {
+            char c = csvLine.charAt(i);
+
+            if (c == '\"') {
+                inQuotes = !inQuotes;
+            } else if (c == ',' && !inQuotes) {
+                result.add(current.toString());
+                current = new StringBuilder();
+            } else {
+                current.append(c);
+            }
+        }
+        result.add(current.toString());
+        return result;
     }
 
     // Getters and Setters

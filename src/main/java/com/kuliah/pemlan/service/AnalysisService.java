@@ -57,7 +57,7 @@ public class AnalysisService {
                 double percentage = (amount / total) * 100;
 
                 insight.append(String.format(" %s: Rp%,.0f (%.1f%%)\n",
-                         emotion, amount, percentage));
+                        emotion, amount, percentage));
             });
             insight.append("\n");
         }

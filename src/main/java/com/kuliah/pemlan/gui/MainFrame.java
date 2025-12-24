@@ -18,6 +18,12 @@ public class MainFrame extends JFrame {
     private InputPanel inputPanel;
     private ReportPanel reportPanel;
 
+    // DI FILE: MainFrame.java
+    public void showEditForm(String transactionId) {
+        cardLayout.show(mainPanel, "INPUT");
+        inputPanel.setEditMode(transactionId);
+    }
+
     public MainFrame() {
         setTitle("Life Insight Manager+ - Personal Behavior & Emotional Spending Analyzer");
         setSize(1000, 650);

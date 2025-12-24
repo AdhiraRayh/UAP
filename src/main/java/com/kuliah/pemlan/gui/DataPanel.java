@@ -275,27 +275,23 @@ public class DataPanel extends JPanel {
         }
     }
 
+    // DI FILE: DataPanel.java
     private void editSelected() {
         int selectedRow = table.getSelectedRow();
         if (selectedRow == -1) {
-
             JOptionPane.showMessageDialog(this,
                     "Pilih transaksi yang ingin diedit!",
                     "Peringatan",
                     JOptionPane.WARNING_MESSAGE);
-
-
             return;
         }
 
-        String transactionId = (String) tableModel.getValueAt(selectedRow, 0);
-        Transaction transaction = transactionList.getTransactionById(transactionId);
+        // Konversi ke model row karena mungkin ada filter
+        int modelRow = table.convertRowIndexToModel(selectedRow);
+        String transactionId = (String) tableModel.getValueAt(modelRow, 0);
 
-        if (transaction != null) {
-            // Switch to input panel for editing
-            parent.showPage("INPUT");
-            // Note: Need to implement edit mode in InputPanel
-        }
+        // Panggil method baru di MainFrame
+        parent.showEditForm(transactionId);
     }
 
     private void deleteSelected() {
