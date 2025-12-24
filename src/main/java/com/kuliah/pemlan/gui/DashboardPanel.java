@@ -23,6 +23,8 @@ public class DashboardPanel extends JPanel {
     private JLabel countValueLabel;
     private JLabel emotionalValueLabel;
 
+    private JTable recentTransactionsTable;
+
     public DashboardPanel(MainFrame parent, TransactionList transactionList) {
         this.parent = parent;
         this.transactionList = transactionList;
@@ -196,6 +198,12 @@ public class DashboardPanel extends JPanel {
         return button;
     }
 
+
+    /**
+     * Membuat isi pada dashboard panel dimana sebelumnya tidak menampilkan apapun
+     *
+     *
+     * **/
     private JPanel createRecentTransactionsPanel() {
         JPanel panel = new JPanel(new BorderLayout());
         panel.setBackground(Color.WHITE);
@@ -210,12 +218,12 @@ public class DashboardPanel extends JPanel {
             }
         };
 
-        JTable table = new JTable(model);
-        table.setRowHeight(25);
-        table.setFont(new Font("Segoe UI", Font.PLAIN, 11));
-        table.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 11));
+        recentTransactionsTable = new JTable(model);  // SIMPAN REFERENSI
+        recentTransactionsTable.setRowHeight(25);
+        recentTransactionsTable.setFont(new Font("Segoe UI", Font.PLAIN, 11));
+        recentTransactionsTable.getTableHeader().setFont(new Font("Segoe UI", Font.BOLD, 11));
 
-        JScrollPane scrollPane = new JScrollPane(table);
+        JScrollPane scrollPane = new JScrollPane(recentTransactionsTable);
         scrollPane.setPreferredSize(new Dimension(800, 150));
 
         panel.add(scrollPane, BorderLayout.CENTER);
@@ -255,42 +263,24 @@ public class DashboardPanel extends JPanel {
     }
 
     private void updateRecentTransactions() {
-        // Find the recent transactions table
-        Component[] components = getComponents();
-        for (Component comp : components) {
-            if (comp instanceof JPanel &&
-                    ((JPanel) comp).getBorder() != null &&
-                    ((JPanel) comp).getBorder().toString().contains("Transaksi Terakhir")) {
+        if (recentTransactionsTable != null) {
+            DefaultTableModel model = (DefaultTableModel) recentTransactionsTable.getModel();
 
-                Component[] subComps = ((JPanel) comp).getComponents();
-                for (Component subComp : subComps) {
-                    if (subComp instanceof JScrollPane) {
-                        JScrollPane scrollPane = (JScrollPane) subComp;
-                        JViewport viewport = scrollPane.getViewport();
-                        if (viewport.getView() instanceof JTable) {
-                            JTable table = (JTable) viewport.getView();
-                            DefaultTableModel model = (DefaultTableModel) table.getModel();
+            // Clear existing data
+            model.setRowCount(0);
 
-                            // Clear existing data
-                            model.setRowCount(0);
+            // Add last 5 transactions
+            List<Transaction> allTransactions = transactionList.getAllTransactions();
+            int start = Math.max(0, allTransactions.size() - 5);
 
-                            // Add last 5 transactions
-                            List<Transaction> allTransactions = transactionList.getAllTransactions();
-                            int start = Math.max(0, allTransactions.size() - 5);
-
-                            for (int i = start; i < allTransactions.size(); i++) {
-                                Transaction t = allTransactions.get(i);
-                                model.addRow(new Object[]{
-                                        t.getDate().toString(),
-                                        t.getDescription(),
-                                        String.format("Rp%,.0f", t.getAmount()),
-                                        t.getEmotion()
-                                });
-                            }
-                        }
-                    }
-                }
-                break;
+            for (int i = start; i < allTransactions.size(); i++) {
+                Transaction t = allTransactions.get(i);
+                model.addRow(new Object[]{
+                        t.getDate().toString(),
+                        t.getDescription(),
+                        String.format("Rp%,.0f", t.getAmount()),
+                        t.getEmotion()
+                });
             }
         }
     }

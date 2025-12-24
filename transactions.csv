@@ -1,3 +1,7 @@
 id,date,description,amount,category,emotion,notes
 TRX2512222103001,2025-12-22,mboh,100000,00,Makanan & Minuman,Netral,sehat
-TRX2512240937001,2025-12-24,wiwo,11500,00,Belanja,Sedih,tidak diskon
+TRX2512241106001,2025-12-24,waduh,2000,00,Makanan & Minuman,Sedih,haduh
+TRX2512241120001,2025-12-24,ngoding,1000,00,Pendidikan,Netral,test1
+TRX2512241122001,2025-12-24,wes,4000,00,Transportasi,Senang,bensin
+TRX2512241128001,2025-12-24,yey,70000,00,Kesehatan,Senang,apapapapap
+TRX2512241130001,2025-12-24,HAH,1000000,00,Hiburan,Marah,HAHEHO
